@@ -1,17 +1,26 @@
 'use strict';
 
+require('dotenv').config();
 const express = require('express');
-
 const server = express();
 
-const PORT = process.env.PORT || 3000; //0-65000
+const PORT = process.env.PORT || 3000;
 
 server.use(express.static('./public'));
 
-server.get('/test',(request,response)=>{
-    response.send('my server is working!!');
-})
+server.get('/hello', (request, response) => {
+  response.status(200).send('Hello');
+});
 
-server.listen(PORT, ()=>{
-    console.log(`listening on port ${PORT}`)
-})
+server.get('/data', (request, response) => {
+  let airplanes = {
+    departure: Date.now(),
+    canFly: true,
+    pilot: 'Well Trained',
+  };
+  response.status(200).json(airplanes);
+});
+
+server.use('*', (request, response) => response.send('Sorry, my server is working!!.'));
+
+server.listen(PORT,() => console.log(`Listening on port ${PORT}`));
